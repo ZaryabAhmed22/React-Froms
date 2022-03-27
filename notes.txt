@@ -7,7 +7,18 @@ What to use useState or useRef
 - When we have to validate the input on every ket stroke, useState can be used, useState ise also used if we want to reset the entered input
 - reseting can be done with vanila JS, but directly manipulating the DOM is not a very clean way of using React.
 
->> VALIDATION
+>> SIMPLE VALIDATION
 - The validation on the front-end is not enough, it's just to give user feedback.
 - This code can be manipulated in the console
 - The real validation is done on the server(backend)
+
+Step # 1
+- Eliminate any empty data.
+
+Step #2 
+- Define state useState(), inputIsValid initally to true. 
+- If the input is valid, set the state to true and if the state is invalid set the state to false
+
+Step # 3
+- Render the msg and styling conditionally
+
