@@ -1,0 +1,13 @@
+>> GETING USER INPUT
+- There are 2 ways of doing so.
+1. useState
+2. useRef
+What to use useState or useRef
+- When we have to validate once a form is submitted, we can use useRef
+- When we have to validate the input on every ket stroke, useState can be used, useState ise also used if we want to reset the entered input
+- reseting can be done with vanila JS, but directly manipulating the DOM is not a very clean way of using React.
+
+>> VALIDATION
+- The validation on the front-end is not enough, it's just to give user feedback.
+- This code can be manipulated in the console
+- The real validation is done on the server(backend)
