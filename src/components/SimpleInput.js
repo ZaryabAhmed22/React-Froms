@@ -1,24 +1,19 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 const SimpleInput = (props) => {
-  //--We can do the same thing with refs
-  const nameInputRef = useRef();
-
   //--Defining the state
   const [enteredName, setEnteredName] = useState("");
   //--Validation State
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
   const [enterNameTouched, setEnterNameTouched] = useState(false);
+
+  const enteredNameIsValid = enteredName.trim() !== "";
+
+  //Combined State that the input was touched and the name is invalid
+  const nameInputIsValid = !enteredNameIsValid && enterNameTouched;
 
   //--Senting the state when the use enters the data
   const nameInputChangeHandler = (event) => {
     setEnteredName(event.target.value);
-
-    //validation
-    if (event.target.value.trim() !== "") {
-      //--Setting the input as invalid
-      setEnteredNameIsValid(true);
-    }
   };
 
   //--Making sure that an error is given if the user erase all the input data
@@ -26,10 +21,6 @@ const SimpleInput = (props) => {
     setEnterNameTouched(true);
 
     //validation
-    if (enteredName.trim() === "") {
-      //--Setting the input as invalid
-      setEnteredNameIsValid(false);
-    }
   };
 
   //-- The actions that shpuld be taken when the form is submitted
@@ -41,23 +32,18 @@ const SimpleInput = (props) => {
     setEnterNameTouched(true);
 
     //--S1 >> Eleminting any whitespaces or any empty strings
-    if (enteredName.trim() === "") {
+    if (!enteredNameIsValid) {
       //--Setting the input as invalid
-      setEnteredNameIsValid(false);
       return;
     }
-    setEnteredNameIsValid(true);
 
     console.log(enteredName); //>> from useState()
 
-    const enteredValue = nameInputRef.current.value; //>> alternate way
-    console.log(enteredValue);
-
     setEnteredName("");
-  };
 
-  //Combined State that the input was touched and the name is invalid
-  const nameInputIsValid = !enteredNameIsValid && enterNameTouched;
+    //--Setting the touched state to false once the user inputs the data to avoid uneccessary error msg
+    setEnterNameTouched(false);
+  };
 
   //Deciding the styling if the input is invalid
   const classes = nameInputIsValid ? "form-control invalid" : "form-control ";
@@ -67,7 +53,6 @@ const SimpleInput = (props) => {
       <div className={classes}>
         <label htmlFor="name">Your Name</label>
         <input
-          ref={nameInputRef}
           type="text"
           id="name"
           onChange={nameInputChangeHandler}
