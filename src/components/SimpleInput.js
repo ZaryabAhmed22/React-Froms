@@ -6,7 +6,9 @@ const SimpleInput = (props) => {
 
   //--Defining the state
   const [enteredName, setEnteredName] = useState("");
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(true);
+  //--Validation State
+  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
+  const [enterNameTouched, setEnterNameTouched] = useState(false);
 
   //--Senting the state when the use enters the data
   const nameInputChangeHandler = (event) => {
@@ -17,6 +19,9 @@ const SimpleInput = (props) => {
   const fromSubmissionHandler = (event) => {
     //--Preventing the form sending an http request to the server which the default behaviour of any form with a button
     event.preventDefault();
+
+    //Checking whether the input was touched
+    setEnterNameTouched(true);
 
     //--S1 >> Eleminting any whitespaces or any empty strings
     if (enteredName.trim() === "") {
@@ -34,8 +39,12 @@ const SimpleInput = (props) => {
     setEnteredName("");
   };
 
+  //Combined State that the input was touched and the name is invalid
+  const nameInputIsValid = !enteredNameIsValid && enterNameTouched;
+
   //Deciding the styling if the input is invalid
-  const classes = enteredNameIsValid ? "form-control" : "form-control invalid";
+  const classes = nameInputIsValid ? "form-control invalid" : "form-control ";
+
   return (
     <form onSubmit={fromSubmissionHandler}>
       <div className={classes}>
@@ -47,7 +56,7 @@ const SimpleInput = (props) => {
           onChange={nameInputChangeHandler}
           value={enteredName}
         />
-        {!enteredNameIsValid && (
+        {nameInputIsValid && (
           <p className="error-text">Name must not be empty</p>
         )}
       </div>

@@ -22,3 +22,6 @@ Step #2
 Step # 3
 - Render the msg and styling conditionally
 
+Draw back
+- fisrt we were setting the initial state to true, which was infact not the ideal case because the untouched form would send an empty data which would cause problems in the server(if sent as an http request)
+- To solve the problem we intoduced another state and first ensured that the form is touched or untouched.
