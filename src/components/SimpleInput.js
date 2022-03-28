@@ -13,6 +13,23 @@ const SimpleInput = (props) => {
   //--Senting the state when the use enters the data
   const nameInputChangeHandler = (event) => {
     setEnteredName(event.target.value);
+
+    //validation
+    if (event.target.value.trim() !== "") {
+      //--Setting the input as invalid
+      setEnteredNameIsValid(true);
+    }
+  };
+
+  //--Making sure that an error is given if the user erase all the input data
+  const nameInputBlurHandler = (event) => {
+    setEnterNameTouched(true);
+
+    //validation
+    if (enteredName.trim() === "") {
+      //--Setting the input as invalid
+      setEnteredNameIsValid(false);
+    }
   };
 
   //-- The actions that shpuld be taken when the form is submitted
@@ -54,6 +71,7 @@ const SimpleInput = (props) => {
           type="text"
           id="name"
           onChange={nameInputChangeHandler}
+          onBlur={nameInputBlurHandler}
           value={enteredName}
         />
         {nameInputIsValid && (
