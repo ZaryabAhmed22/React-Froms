@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const SimpleInput = (props) => {
   //--Defining the state
@@ -6,10 +6,22 @@ const SimpleInput = (props) => {
   //--Validation State
   const [enterNameTouched, setEnterNameTouched] = useState(false);
 
+  //--S1 Overall form validation
+  const [fromIsValid, setFromIsValid] = useState(false);
+
   const enteredNameIsValid = enteredName.trim() !== "";
 
   //Combined State that the input was touched and the name is invalid
   const nameInputIsValid = !enteredNameIsValid && enterNameTouched;
+
+  //--S2 Overall form validation
+  useEffect(() => {
+    if (enteredNameIsValid) {
+      setFromIsValid(true);
+    } else {
+      setFromIsValid(false);
+    }
+  }, [enteredNameIsValid]);
 
   //--Senting the state when the use enters the data
   const nameInputChangeHandler = (event) => {
@@ -64,7 +76,7 @@ const SimpleInput = (props) => {
         )}
       </div>
       <div className="form-actions">
-        <button>Submit</button>
+        <button disabled={!fromIsValid}>Submit</button>
       </div>
     </form>
   );

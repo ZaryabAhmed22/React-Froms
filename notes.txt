@@ -30,3 +30,7 @@ Draw back#2
 - If the user entered a valid data and erased them all, no error will be given. This can easily be handled by adding the onBlur event hanlder and validating when the input loses foucs.
 - But the error will not be removed once the user starts writing again. Here we have to move to another validation method, that is validating on every keystroke.
 - So in order to fix it, we can check the validation on onChange event handler. Checking if the  setEnteredName(event.target.value) is valid or not. 
+
+>> OVERALL FORM VALIDATION
+- The overall form will be valid if all the fields of the form are valid, and the form will be invalid if anyone of the field is invalid
+- 
