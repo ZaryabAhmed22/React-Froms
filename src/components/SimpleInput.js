@@ -1,78 +1,89 @@
 import { useEffect, useState } from "react";
+import useInput from "../hooks/use-input";
 
 const SimpleInput = (props) => {
-  //--Defining the state
-  const [enteredName, setEnteredName] = useState("");
-  //--Validation State
-  const [enterNameTouched, setEnterNameTouched] = useState(false);
+  //name validation
+  const {
+    value: enteredName,
+    hasError: nameInputHasError,
+    valueChangeHandler: nameChangeHandler,
+    isValid: enteredNameIsValid,
+    valueBlurHandler: nameBlurHandler,
+    reset: resetNameInput,
+  } = useInput((value) => value.trim() !== "");
 
+  //Email Validation
+  const {
+    value: enteredEmail,
+    hasError: emailInputHasError,
+    valueChangeHandler: emailChangeHandler,
+    isValid: enteredEmailIsValid,
+    valueBlurHandler: emailBlurHandler,
+    reset: resetEmailInput,
+  } = useInput((value) => value.trim() !== "" && value.includes("@"));
   //--S1 Overall form validation
   const [fromIsValid, setFromIsValid] = useState(false);
 
-  const enteredNameIsValid = enteredName.trim() !== "";
-
-  //Combined State that the input was touched and the name is invalid
-  const nameInputIsValid = !enteredNameIsValid && enterNameTouched;
-
   //--S2 Overall form validation
   useEffect(() => {
-    if (enteredNameIsValid) {
+    if (enteredNameIsValid && enteredEmailIsValid) {
       setFromIsValid(true);
     } else {
       setFromIsValid(false);
     }
-  }, [enteredNameIsValid]);
-
-  //--Senting the state when the use enters the data
-  const nameInputChangeHandler = (event) => {
-    setEnteredName(event.target.value);
-  };
-
-  //--Making sure that an error is given if the user erase all the input data
-  const nameInputBlurHandler = (event) => {
-    setEnterNameTouched(true);
-
-    //validation
-  };
+  }, [enteredNameIsValid, enteredEmailIsValid]);
 
   //-- The actions that shpuld be taken when the form is submitted
   const fromSubmissionHandler = (event) => {
-    //--Preventing the form sending an http request to the server which the default behaviour of any form with a button
     event.preventDefault();
 
-    //Checking whether the input was touched
-    setEnterNameTouched(true);
-
-    //--S1 >> Eleminting any whitespaces or any empty strings
-    if (!enteredNameIsValid) {
+    if (!enteredNameIsValid && !enteredEmailIsValid) {
       //--Setting the input as invalid
       return;
     }
-
-    console.log(enteredName); //>> from useState()
-
-    setEnteredName("");
-
-    //--Setting the touched state to false once the user inputs the data to avoid uneccessary error msg
-    setEnterNameTouched(false);
+    resetNameInput();
+    resetEmailInput();
   };
 
   //Deciding the styling if the input is invalid
-  const classes = nameInputIsValid ? "form-control invalid" : "form-control ";
+  const nameClasses = nameInputHasError
+    ? "form-control invalid"
+    : "form-control ";
 
+  const emailClasses = emailInputHasError
+    ? "form-control invalid"
+    : "form-control ";
+
+  //console.log(nameInputHasError, enteredName, enteredNameIsValid);
   return (
     <form onSubmit={fromSubmissionHandler}>
-      <div className={classes}>
+      {/* Name Input */}
+      <div className={nameClasses}>
         <label htmlFor="name">Your Name</label>
         <input
           type="text"
           id="name"
-          onChange={nameInputChangeHandler}
-          onBlur={nameInputBlurHandler}
+          onChange={nameChangeHandler}
+          onBlur={nameBlurHandler}
           value={enteredName}
         />
-        {nameInputIsValid && (
+        {nameInputHasError && (
           <p className="error-text">Name must not be empty</p>
+        )}
+      </div>
+
+      {/* Name Input */}
+      <div className={emailClasses}>
+        <label htmlFor="email">Your Email</label>
+        <input
+          type="text"
+          id="email"
+          onChange={emailChangeHandler}
+          onBlur={emailBlurHandler}
+          value={enteredEmail}
+        />
+        {emailInputHasError && (
+          <p className="error-text">Email must not be empty and containe @</p>
         )}
       </div>
       <div className="form-actions">
